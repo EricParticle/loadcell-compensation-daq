@@ -1,13 +1,11 @@
 #include "Particle.h"
 #include "scale/scale.h"
-#include "temp/temp.h"
 
 SYSTEM_MODE(AUTOMATIC);
 
 #define SYS_DELAY_MS 100
 
 ScaleReading scaleReading = {0.0, 0};
-float temperature = 0.0;
 char buf[128];
 
 SerialLogHandler logHandler(
@@ -29,12 +27,11 @@ float knownWeightValue = 0.0;
 
 void loop()
 {
-  readTemp(&temperature);
   readScale(&scaleReading);
   unsigned long timeSinceTare = getTimeSinceTare();
   float error = knownWeightValue - scaleReading.weight;
 
-  snprintf(buf, sizeof(buf), "%ld,%f,%ld,%f,%f", timeSinceTare, temperature, scaleReading.raw, scaleReading.weight, error);
+  snprintf(buf, sizeof(buf), "%ld,%ld,%f,%f", timeSinceTare, scaleReading.raw, scaleReading.weight, error);
   Serial.println(buf);
 
   if (Serial.available() > 0)
