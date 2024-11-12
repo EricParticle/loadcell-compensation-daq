@@ -18,6 +18,11 @@ void setup()
 {
   Serial.begin(115200);
 
+  // Enable 3V3_AUX
+  SystemPowerConfiguration powerConfig = System.getPowerConfiguration();
+  powerConfig.auxiliaryPowerControlPin(D7).interruptPin(A6);
+  System.setPowerConfiguration(powerConfig);
+
   Particle.function("tare", tare);
   Particle.function("calibrate", calibrate);
   initializeScale();
